@@ -1,0 +1,49 @@
+.links { gap: 0 1.4rem; }
+.links .btn, .toc-main .more-link .btn { border: 0; padding: 0; border-radius: 0; background: none; color: var(--ink);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; font-size: 1rem; }
+.links .btn:hover { color: var(--ink); text-decoration-thickness: 2px; }
+.tldr { border: 0; padding-inline: 0; }
+.tldr .lbl { display: inline; color: var(--ink); margin: 0 0.4em 0 0; font-size: inherit; }
+.toc-main .section.appendix { background: none; padding-inline: 0; }
+.toc-main .section.appendix > .measure { padding-inline: 0; }
+.section.appendix pre.bib { background: #fff; border: 1px solid var(--line-2); border-radius: 4px; padding: 0.8rem 1rem; }
+figcaption, .caption { font-size: 0.88rem; line-height: 1.5; color: var(--ink-2); }
+.side-toc a { color: var(--muted); }
+
+.toc-main figure.side-cap { display: grid; grid-template-columns: minmax(0, 24rem) minmax(0, 1fr); gap: 1.6rem; align-items: center; }
+.toc-main figure.side-cap > figcaption { margin: 0; max-width: none; }
+@media (max-width: 700px) { .toc-main figure.side-cap { grid-template-columns: minmax(0, 1fr); gap: 0.6rem; } }
+
+.authors a { color: var(--ink); }
+.links .btn { text-decoration: none; gap: 0; }
+.links .btn::before { content: "["; } .links .btn::after { content: "]"; }
+.links .btn:hover { text-decoration: underline; }
+
+.c-space3d .s3-unit, .c-space3d .s3-share, .c-space3d .s3-ctl { display: none; }
+
+.tex .katex { font-size: 1.05em; }
+
+.c-figure1 .f1-steps { display: block; max-width: var(--measure); margin-inline: auto; min-height: 3.2em; }
+.c-figure1 .f1-steps li { display: none; }
+.c-figure1 .f1-steps li.on { display: flex; }
+.c-figure1.f1-has-active .f1-hint { visibility: hidden; }
+.c-figure1 .f1-btn { cursor: pointer; }
+
+.c-space3d .s3-top { display: flex; align-items: baseline; gap: 0.8rem; margin-bottom: 0.6rem; }
+.c-space3d .s3-lab { font-weight: bold; color: var(--ink-2); }
+
+.toc-main details.fig-fold { margin: 0.4rem 0 1.4rem; }
+.toc-main details.fig-fold > summary { max-width: var(--measure); margin-inline: auto; cursor: pointer; color: var(--accent); font-size: 0.95rem; }
+.toc-main details.fig-fold[open] > summary { margin-bottom: 0.8rem; }
+
+figure.band-wide { max-width: 64rem; }
+
+.toc-main .prose .eq { overflow: visible; }
+@media (max-width: 640px) {
+  .toc-main .prose .eq { overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+  .toc-main .prose .eq::-webkit-scrollbar { display: none; }
+}
+
+.hero-gallery .back a::before { content: "\2190\00a0"; font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+
+.toc-main figure.cap-top > figcaption { margin: 0 auto 0.85rem; }

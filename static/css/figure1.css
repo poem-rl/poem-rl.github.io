@@ -1,0 +1,93 @@
+.c-figure1 {
+  --f1-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  position: relative;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .c-figure1 {
+    --f1-ink: var(--ink); --f1-charcoal: #a8a29e; --f1-muted: #a29d96; --f1-slate: #b6c2d4;
+    --f1-plane: #13212d; --f1-plane-edge: #3b8fc4; --f1-box: #22262e; --f1-sheet: #262a33; --f1-sheet-line: #6b7079;
+    --f1-paper: var(--bg); --f1-halo: var(--f1-plane); --f1-on-slate: var(--bg); --f1-on-band: #ffffff; --f1-band: #7f22fe;
+    --f1-e3: #ef4b55; --f1-e4: #1fae84; --f1-e3-ink: #fca5a5; --f1-e4-ink: #6ee7b7;
+    --f1-e1-pill: color-mix(in srgb, var(--e1) 16%, var(--bg)); --f1-e2-pill: color-mix(in srgb, var(--e2) 16%, var(--bg));
+    --f1-e3-pill: color-mix(in srgb, var(--f1-e3) 16%, var(--bg)); --f1-e4-pill: color-mix(in srgb, var(--f1-e4) 16%, var(--bg));
+    --f1-e1-chip: color-mix(in srgb, var(--e1) 42%, var(--bg)); --f1-e2-chip: color-mix(in srgb, var(--e2) 42%, var(--bg));
+    --f1-e3-chip: color-mix(in srgb, var(--f1-e3) 42%, var(--bg)); --f1-e4-chip: color-mix(in srgb, var(--f1-e4) 42%, var(--bg));
+    --f1-poem-tint: color-mix(in srgb, var(--poem) 16%, var(--bg)); --f1-tar-tint: color-mix(in srgb, var(--tar) 16%, var(--bg));
+    --f1-glow-8: color-mix(in srgb, var(--poem) 4%, var(--f1-plane)); --f1-glow-7: color-mix(in srgb, var(--poem) 8%, var(--f1-plane));
+    --f1-glow-6: color-mix(in srgb, var(--poem) 12%, var(--f1-plane)); --f1-glow-5: color-mix(in srgb, var(--poem) 16%, var(--f1-plane));
+    --f1-glow-4: color-mix(in srgb, var(--poem) 19%, var(--f1-plane)); --f1-glow-3: color-mix(in srgb, var(--poem) 22%, var(--f1-plane));
+    --f1-glow-2: color-mix(in srgb, var(--poem) 26%, var(--f1-plane)); --f1-glow-1: color-mix(in srgb, var(--poem) 30%, var(--f1-plane));
+  }
+}
+:root[data-theme="dark"] .c-figure1 {
+  --f1-ink: var(--ink); --f1-charcoal: #a8a29e; --f1-muted: #a29d96; --f1-slate: #b6c2d4;
+  --f1-plane: #13212d; --f1-plane-edge: #3b8fc4; --f1-box: #22262e; --f1-sheet: #262a33; --f1-sheet-line: #6b7079;
+  --f1-paper: var(--bg); --f1-halo: var(--f1-plane); --f1-on-slate: var(--bg); --f1-on-band: #ffffff; --f1-band: #7f22fe;
+  --f1-e3: #ef4b55; --f1-e4: #1fae84; --f1-e3-ink: #fca5a5; --f1-e4-ink: #6ee7b7;
+  --f1-e1-pill: color-mix(in srgb, var(--e1) 16%, var(--bg)); --f1-e2-pill: color-mix(in srgb, var(--e2) 16%, var(--bg));
+  --f1-e3-pill: color-mix(in srgb, var(--f1-e3) 16%, var(--bg)); --f1-e4-pill: color-mix(in srgb, var(--f1-e4) 16%, var(--bg));
+  --f1-e1-chip: color-mix(in srgb, var(--e1) 42%, var(--bg)); --f1-e2-chip: color-mix(in srgb, var(--e2) 42%, var(--bg));
+  --f1-e3-chip: color-mix(in srgb, var(--f1-e3) 42%, var(--bg)); --f1-e4-chip: color-mix(in srgb, var(--f1-e4) 42%, var(--bg));
+  --f1-poem-tint: color-mix(in srgb, var(--poem) 16%, var(--bg)); --f1-tar-tint: color-mix(in srgb, var(--tar) 16%, var(--bg));
+  --f1-glow-8: color-mix(in srgb, var(--poem) 4%, var(--f1-plane)); --f1-glow-7: color-mix(in srgb, var(--poem) 8%, var(--f1-plane));
+  --f1-glow-6: color-mix(in srgb, var(--poem) 12%, var(--f1-plane)); --f1-glow-5: color-mix(in srgb, var(--poem) 16%, var(--f1-plane));
+  --f1-glow-4: color-mix(in srgb, var(--poem) 19%, var(--f1-plane)); --f1-glow-3: color-mix(in srgb, var(--poem) 22%, var(--f1-plane));
+  --f1-glow-2: color-mix(in srgb, var(--poem) 26%, var(--f1-plane)); --f1-glow-1: color-mix(in srgb, var(--poem) 30%, var(--f1-plane));
+}
+
+.c-figure1 .f1-sr {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); border: 0;
+}
+.c-figure1 svg.f1-svg { display: block; overflow: hidden; }
+.c-figure1 .f1-full svg.f1-svg { width: 100%; height: auto; }
+
+.c-figure1 .f1-panel + .f1-panel { margin-top: 1.1rem; padding-top: 1.1rem; border-top: 1px solid var(--line); }
+.c-figure1 .f1-scroller { overscroll-behavior-x: contain; border-radius: 4px; }
+.c-figure1 .f1-scroller svg.f1-svg { max-width: none; margin-inline: auto; }
+.c-figure1 .f1-scroller.more { mask-image: linear-gradient(90deg, #000 calc(100% - 32px), transparent); -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 32px), transparent); }
+.c-figure1 .f1-scroller.less { mask-image: linear-gradient(90deg, transparent, #000 32px); -webkit-mask-image: linear-gradient(90deg, transparent, #000 32px); }
+.c-figure1 .f1-scroller.more.less {
+  mask-image: linear-gradient(90deg, transparent, #000 32px, #000 calc(100% - 32px), transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 32px, #000 calc(100% - 32px), transparent);
+}
+.c-figure1 .f1-scroll-hint { margin: 0.3rem 0 0; text-align: right; font-size: 0.8rem; color: var(--muted); letter-spacing: 0.02em; }
+
+.c-figure1 svg.f1-svg > *, .c-figure1 .f1-btn > * { transition: opacity 0.25s ease; }
+.c-figure1 .f1-dim { opacity: 0.13; }
+.c-figure1 .f1-btn.f1-dim-soft > .f1-face { opacity: 0.4; }
+.c-figure1 .f1-btn { cursor: pointer; outline: none; }
+.c-figure1 .f1-hit { fill: none; pointer-events: all; }
+.c-figure1 .f1-ring-on, .c-figure1 .f1-ring-focus { fill: none; opacity: 0; }
+.c-figure1 .f1-ring-on { stroke: var(--f1-slate, #314158); stroke-width: 3; }
+.c-figure1 .f1-ring-focus { stroke: var(--focus); stroke-width: 3.5; }
+.c-figure1 .f1-btn:hover .f1-ring-on { opacity: 0.45; }
+.c-figure1 .f1-btn[aria-pressed="true"] .f1-ring-on { opacity: 1; }
+.c-figure1 .f1-btn:focus-visible .f1-ring-focus { opacity: 1; }
+
+.c-figure1 .f1-hint { margin: 0.9rem auto 0; max-width: var(--measure); font-size: 0.84rem; color: var(--muted); }
+.c-figure1 .f1-steps {
+  list-style: none; margin: 0.45rem auto 0; padding: 0; max-width: var(--measure);
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.45rem 1.4rem;
+  font-size: 0.9rem; line-height: 1.5; color: var(--ink-2);
+}
+.c-figure1 .f1-steps li { display: flex; gap: 0.55rem; align-items: flex-start; cursor: pointer; transition: opacity 0.25s ease; }
+.c-figure1 .f1-pick {
+  font: inherit; font-weight: bold; color: var(--ink); background: none; border: 0; padding: 0; margin: 0; cursor: pointer;
+}
+.c-figure1 .f1-steps li:hover .f1-pick {
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px;
+}
+.c-figure1 .f1-n {
+  flex: none; width: 1.3rem; height: 1.3rem; margin-top: 0.08rem; border-radius: 50%;
+  display: inline-grid; place-items: center; font-weight: bold; font-size: 0.78rem; line-height: 1;
+  background: var(--f1-slate, #314158); color: var(--f1-on-slate, #ffffff); font-variant-numeric: lining-nums;
+}
+.c-figure1 .f1-steps li.on .f1-n { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--f1-slate, #314158); }
+.c-figure1 .f1-steps li.off { opacity: 0.4; }
+
+@media (max-width: 720px) {
+  .c-figure1 .f1-steps { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .c-figure1 svg.f1-svg > *, .c-figure1 .f1-btn > *, .c-figure1 .f1-steps li { transition: none; }
+}

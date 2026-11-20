@@ -1,0 +1,43 @@
+:root {
+  --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781; --line: #e5e7eb; --line-2: #d1d5db;
+  --surface: #f3f4f6; --surface-2: #e8eaee;
+  --ref: #a9a8a1; --ref-strong: #898781;
+  --e1: #0069a2; --e2: #da7700; --poem: #7f22fe; --poem-ink: #5d0ec0; --tar: #c2005c; --tar-ink: #c2005c;
+  --pgrpo: #e99638; --pgrpo-l: #f3bd82; --pgrpo-ink: #a35f12;
+  --pdpo: #184f95; --pdpo-l: #6da7ec; --pdpo-ink: #184f95;
+  --rmdiv: #0f7a55; --rmdiv-l: #45b58a; --rmdiv-ink: #0f7a55;
+  --rmsky: #1e9dc8; --rmsky-l: #8fd3ea; --rmsky-ink: #177696;
+  --math: #9b2d86; --tool: #0a8fb0; --corr: #2f9e44; --lenx: #3e3d3a;
+  --star: #0b0b0b; --star2: #a9a8a1;
+  --dtheta: #3a3a3a;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #eceae4; --ink-2: #c3c2b7; --muted: #9a988f; --line: #2e2d2a; --line-2: #45443f;
+    --surface: #1d1c1a; --surface-2: #262522; --bg: #141412;
+    --ref: #6f6e68; --ref-strong: #9a988f;
+    --e1: #3d9be0; --e2: #f0a043; --poem: #a77bff; --poem-ink: #c4a7ff; --tar: #ff5aa5; --tar-ink: #ff8cc0;
+    --pgrpo: #e99638; --pgrpo-l: #f6c994; --pgrpo-ink: #f6c994;
+    --pdpo: #6da7ec; --pdpo-l: #9ec5f4; --pdpo-ink: #9ec5f4;
+    --rmdiv: #45b58a; --rmdiv-l: #7fd0ad; --rmdiv-ink: #7fd0ad;
+    --rmsky: #4fbde3; --rmsky-l: #8fd3ea; --rmsky-ink: #8fd3ea;
+    --math: #d070b9; --tool: #3dbad8; --corr: #5cc46f; --lenx: #b8b6ad;
+    --star: #eceae4; --star2: #6f6e68; --dtheta: #b8b6ad;
+  }
+}
+:root[data-theme="dark"] {
+  --ink: #eceae4; --ink-2: #c3c2b7; --muted: #9a988f; --line: #2e2d2a; --line-2: #45443f;
+  --surface: #1d1c1a; --surface-2: #262522; --bg: #141412;
+  --ref: #6f6e68; --ref-strong: #9a988f;
+  --e1: #3d9be0; --e2: #f0a043; --poem: #a77bff; --poem-ink: #c4a7ff; --tar: #ff5aa5; --tar-ink: #ff8cc0;
+  --pgrpo: #e99638; --pgrpo-l: #f6c994; --pgrpo-ink: #f6c994;
+  --pdpo: #6da7ec; --pdpo-l: #9ec5f4; --pdpo-ink: #9ec5f4;
+  --rmdiv: #45b58a; --rmdiv-l: #7fd0ad; --rmdiv-ink: #7fd0ad;
+  --rmsky: #4fbde3; --rmsky-l: #8fd3ea; --rmsky-ink: #8fd3ea;
+  --math: #d070b9; --tool: #3dbad8; --corr: #5cc46f; --lenx: #b8b6ad;
+  --star: #eceae4; --star2: #6f6e68; --dtheta: #b8b6ad;
+}
+:root { --pgrpo-m: #f3bd82; --grpo-ramp: #b84d1d; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --pgrpo-m: #f8dcb8; --grpo-ramp: #f6c994; } }
+:root[data-theme="dark"] { --pgrpo-m: #f8dcb8; --grpo-ramp: #f6c994; }
+html, body { background: var(--bg); }

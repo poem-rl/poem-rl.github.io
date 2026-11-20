@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>document.documentElement.setAttribute("data-theme", "light");</script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PoEM response gallery</title>
+<meta name="description" content="More held-out responses from the PoEM paper, and the image diffusion examples.">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&display=swap">
+<link rel="stylesheet" href="static/css/fonts.css">
+<link rel="stylesheet" href="static/css/site.css">
+<link rel="stylesheet" href="static/css/diffusion.css">
+<link rel="stylesheet" href="static/css/lineup.css">
+<link rel="stylesheet" href="static/css/v4viz.css">
+<link rel="stylesheet" href="static/css/paper.css">
+<link rel="stylesheet" href="static/css/simple.css">
+<link rel="stylesheet" href="static/css/typography.css">
+<link rel="stylesheet" href="static/css/etbook.css">
+<style>:root{--serif:"Iowan Old Style", "Iowan Old Style BT", "Pagella Web", Palatino, Georgia, serif;}h1,h2,h3{font-family:"ET Book", "Pagella Web", Palatino, Georgia, serif;}body{font-size:17px;line-height:27px;}</style>
+</head>
+<body>
+<div class="page">
+
+<header class="hero hero-gallery">
+  <p class="back"><a href="./">PoEM: Predicting RL Outcomes from Existing Policies</a></p>
+  <h1>Response gallery</h1>
+  <div class="tldr">
+    More responses for the larger reward model, in the format of the page. The <a href="#images">image examples</a> from the diffusion models follow.
+  </div>
+</header>
+
+<section class="section" id="larger-rm">
+  <div class="measure">
+    <h2>Larger reward model</h2>
+    <div class="prose">
+      <p>π<sub>tar</sub> is RL on the 8B reward model, and PoEM composes the experts trained with RL on its 3B and 4B siblings. On these prompts PoEM writes the way π<sub>tar</sub> does; over 53 short prompts, blind reviewers found PoEM's response closest to π<sub>tar</sub>'s on 27, the top expert's on 16 and the reference model's on 10. Where every response restates the prompt first, rows start at the first item, and on the wildebeest prompt at the fourth, which PoEM and π<sub>tar</sub> write word for word.</p>
+    </div>
+  </div>
+  <figure class="band">
+    <div class="fig-body" data-component="lineup" data-src="static/data/lineup.json" data-set="gallery_bigrm"></div>
+  </figure>
+</section>
+
+<section class="section" id="images">
+  <div class="measure">
+    <h2>Image diffusion models</h2>
+    <div class="prose">
+      <p>Composing the experts trained on the other rewards reproduces the change the target model makes, such as more saturated colors, finer texture, and a centered subject on a blurred background. The held-out expert's changes lie largely within what the other experts can express.</p>
+    </div>
+  </div>
+  <figure class="band">
+    <div class="fig-body" data-component="diffusion" data-src="static/data/diffusion.json"></div>
+    <figcaption id="cap-diffusion"><b>PoEM approximates the effect of RL fine-tuning on a held&#8209;out image reward.</b> Composing the other experts reproduces much of the change the target model makes. The weights are fit to the held&#8209;out expert at each denoising step, so this shows how much of its changes lie within what the others can express.</figcaption>
+  </figure>
+</section>
+
+<footer class="footer">
+  <div class="measure">
+    <p><a href="./">Back to the PoEM project page</a>. Page template adapted from the
+    <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener">Academic Project Page Template</a>.</p>
+  </div>
+</footer>
+
+</div>
+<script src="static/js/math.js"></script>
+<script src="static/js/site.js"></script>
+<script src="static/js/lineup.js"></script>
+<script src="static/js/diffusion.js"></script>
+</body>
+</html>

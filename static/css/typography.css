@@ -1,0 +1,4 @@
+:root { --prose: 42.6rem; --measure: 46rem; }
+body { font-size: 18.2px; line-height: 26px; color: rgba(0, 0, 0, 0.87); }
+.toc-main h2 { font-weight: 500; font-size: 1.55rem; }
+.toc-main .prose a { color: #327e09; text-decoration: none; }

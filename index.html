@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0;background:#fff}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<script>document.documentElement.setAttribute("data-theme", "light");</script>
+<title>PoEM: Predicting RL Outcomes from Existing Policies</title>
+<meta name="description" content="Can we predict what RL would do to a model on a new reward without running RL again? PoEM approximates the outcome of RL on a new reward by composing policies already trained on other rewards.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&display=swap">
+<link rel="stylesheet" href="static/css/fonts.css">
+<link rel="stylesheet" href="static/css/site.css">
+<link rel="stylesheet" href="static/css/figure1.css">
+<link rel="stylesheet" href="static/css/v4viz.css">
+<link rel="stylesheet" href="static/css/paper.css">
+<link rel="stylesheet" href="static/css/academic.css">
+<link rel="stylesheet" href="static/css/katex.css">
+<link rel="stylesheet" href="static/css/rmdiv.css">
+<link rel="stylesheet" href="static/css/lineup.css">
+<link rel="stylesheet" href="static/css/simple.css">
+<link rel="stylesheet" href="static/css/typography.css">
+<link rel="stylesheet" href="static/css/etbook.css">
+<style>:root{--serif:"Iowan Old Style", "Iowan Old Style BT", "Pagella Web", Palatino, Georgia, serif;}h1,h2,h3{font-family:"ET Book", "Pagella Web", Palatino, Georgia, serif;}body{font-size:17px;line-height:27px;}</style>
+</head>
+<body>
+<div class="page">
+
+<header class="hero">
+  <h1>PoEM: Predicting RL Outcomes<br class="title-break"> from Existing Policies</h1>
+  <div class="authors">
+    <a href="https://kimiah.github.io" target="_blank" rel="noopener">Kimia Hamidieh</a>
+    <a href="https://giannisdaras.github.io" target="_blank" rel="noopener">Giannis Daras</a>
+    <a href="https://groups.csail.mit.edu/vision/torralbalab/" target="_blank" rel="noopener">Antonio Torralba</a>
+  </div>
+  <div class="affil">MIT CSAIL</div>
+  <div class="links">
+    <a class="btn" href="https://arxiv.org/pdf/2609.30226" target="_blank" rel="noopener">arXiv</a>
+    <a class="btn" href="https://github.com/kimiah/poem-rl-outcomes" target="_blank" rel="noopener">Code</a>
+    <a class="btn" href="#bibtex">BibTeX</a>
+  </div>
+  <div class="tldr">
+    <span class="lbl">TL;DR</span>
+    We find that RL training with different rewards moves the reference policy along fewer directions than the rewards. We leverage this empirical finding to predict the RL policies a given set of basis policies trained with different rewards can reach, by composing the basis policies at inference time.
+  </div>
+</header>
+
+<section class="section" id="overview" aria-label="Overview">
+  <figure class="band band-wide">
+    <div class="fig-body" data-component="figure1" data-src="static/data/figure1.json"></div>
+    <figcaption id="cap-figure1"><span class="fig-n">Figure 1.</span> <b>Overview of PoEM.</b> (a) Policies post-trained with RL on different rewards have nearly orthogonal parameter updates, yet their policy log-ratios span a low dimensional space. (b) PoEM fits composition weights on a small calibration set scored by the target reward, and composes the basis policies at inference time.</figcaption>
+  </figure>
+</section>
+
+<div class="toc-layout">
+<nav class="side-toc" aria-label="Contents">
+  <a href="#overview">Overview</a>
+  <a href="#idea">Policy composition</a>
+  <a href="#structure">Policy space geometry</a>
+  <a href="#heldout">Held-out rewards</a>
+  <a href="#larger-rm">Larger reward model</a>
+  <a href="#discussion">Implications</a>
+  <a href="#gallery">More responses</a>
+  <a href="#bibtex">Citation</a>
+</nav>
+<div class="toc-main">
+
+<section class="section" id="intro" aria-label="Introduction">
+  <div class="measure">
+    <div class="prose">
+      <p>Post-training with reinforcement learning (RL) is expensive, sometimes unstable, and has to be redone every time the reward changes. Our motivation is to predict and preview the RL post-trained model on a new reward. Concretely,</p>
+      <p class="rq"><i>Given a new reward function, is it possible to predict the policy RL would produce without actually training on that reward?</i></p>
+      <p>We start from the simple theoretical observation that if the new reward is a linear combination of the existing rewards, the optimal policy has a closed form: a weighted product of the reference model and the policies trained on the existing rewards, whose weights can be estimated by linear regression on a small set of reward evaluations. A new reward, however, rarely decomposes linearly into a small fixed basis.</p>
+      <p>Despite this, we find that the policies learned from existing rewards often span a lower dimensional space in log-probabilities than the reward geometry suggests. Even when the rewards are not linearly connected, the matrix of log-ratios against the reference model spans far fewer effective directions. A policy trained on a new reward can therefore lie inside this subspace even when the reward is not a linear combination of the basis rewards.</p>
+      <p>Inspired by these observations, we propose PoEM (Product of Experts Mixing), which predicts the RL outcome on a new reward by composing models previously trained with RL on other rewards. A coverage score computed before decoding specifies which new policies PoEM can approximate.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="idea">
+  <div class="measure">
+    <h2>1. Predicting RL outcomes by policy composition</h2>
+    <div class="prose">
+      <p>Assume that we have access to a set of basis policies, where each basis policy <span class="tex" data-tex="\pi_k"></span> is trained with RL from a shared reference model <span class="tex" data-tex="\pi_{\mathrm{ref}}"></span> on its reward <span class="tex" data-tex="r_k"></span> with a KL penalty, <span class="tex" data-tex="\max_{\pi}\,\mathbb{E}_{y\sim\pi}[r_k(x,y)]-\beta\,\mathrm{KL}(\pi\,\|\,\pi_{\mathrm{ref}})"></span>. The optimal policy is the reference policy tilted by the reward, <span class="tex" data-tex="\pi_k \propto \pi_{\mathrm{ref}}\, e^{r_k/\beta}"></span>.</p>
+      <p>If the new reward <span class="tex" data-tex="\htmlClass{eqc-r}{r_{\mathrm{tar}}}"></span> is a linear combination of the existing rewards, the optimal policy would be a product-of-experts. In log space, the optimal target policy adds the basis policies' weighted log-ratios <span class="tex" data-tex="\htmlClass{eqc-phi}{\phi_k}"></span>, which explain how far each basis policy has moved from the reference model, to the reference model's log-probabilities:</p>
+      <div class="eq" data-eq="blog_poe"></div>
+      <div class="eq" data-eq="blog_logform" data-eq-narrow="blog_logform_narrow"></div>
+      <p>By rearranging the optimum, each policy log-ratio is also an implicit reward. So we  recover the weights <span class="tex" data-tex="\htmlClass{eqc-a}{\hat{\alpha}}"></span> by regressing the new reward's scores on a small calibration set onto the basis policies' log-ratios <span class="tex" data-tex="\htmlClass{eqc-phi}{\widetilde{\Phi}}"></span>. The calibration set is a few hundred prompts with four responses each, sampled from the reference model and basis policies. We can then use these weights to sample autoregressively from the product of experts at inference time.</p>
+      <div class="eq" data-eq="blog_poem2" data-eq-narrow="blog_poem2_narrow"></div>
+    </div>
+  </div>
+  <div class="measure">
+    <div class="prose">
+      <p>We test this on different bases, or sets of expert models trained with RL from Qwen3-0.6B on different programmatic rewards (P&#8209;GRPO, P&#8209;DPO) or on reward models (RM&#8209;RB, RM&#8209;HH, RM&#8209;Div, RM&#8209;Sky). When the new reward combines the basis rewards, PoEM recovers most of RL's reward improvement (Figure 2).</p>
+    </div>
+  </div>
+
+  <figure class="band paper-fig">
+    <img src="static/img/fig_combined.svg" width="970" height="323" alt="Bar charts of recovery (left) and relative KL to pi_tar (right) on P-GRPO, P-DPO, RM-RB and RM-HH, for PoEM with fitted and true weights, the top expert and best-of-16.">
+    <figcaption id="cap-combined"><span class="fig-n">Figure 2.</span> <b>On combined rewards, PoEM recovers most of RL's reward improvement, and is closer to the target policy.</b> Left: recovery, where 1 matches <span class="tex" data-tex="\pi_{\mathrm{tar}}"></span> and 0 the reference model. Right: relative KL to <span class="tex" data-tex="\pi_{\mathrm{tar}}"></span>. PoEM uses fitted (light) or true (dark) weights.</figcaption>
+  </figure>
+</section>
+
+<section class="section" id="structure">
+  <div class="measure">
+    <h2>2. Policy space geometry of models trained on different rewards</h2>
+    <div class="prose">
+      <p>So far we relied on the strong assumption that the new reward is a linear combination of the basis rewards. PoEM, however, composes the basis policy log-ratios, <span class="tex" data-tex="\log\pi_k - \log\pi_{\mathrm{ref}}"></span>, rather than their rewards. The question is therefore whether the target policy's log-ratio can lie near the subspace spanned by the basis log-ratios, even when the target reward is not a linear combination of the basis rewards.</p>
+      <p><b>RL policies vary along fewer directions than their rewards.</b> Across the twenty P&#8209;GRPO basis policies, the effective rank of the policy log-ratio matrix is 6.3, despite nearly orthogonal parameter updates (19.4) and higher rank basis rewards (12.6) (Figures 3 and 4). The policies reachable by composing the basis policies therefore form a low dimensional space that the basis covers densely. We measure whether a new target policy lies in this space, using a coverage score (Section 3).</p>
+    </div>
+  </div>
+  <figure class="band">
+    <div class="fig-body" data-component="space3d" data-src="static/data/space3d.json"></div>
+    <figcaption id="cap-space3d"><span class="fig-n">Figure 3.</span> <b>A set of different rewards produce similar policies.</b> We measure rewards <span class="tex" data-tex="r_k(x, y)"></span> and corresponding policy log-ratios <span class="tex" data-tex="\phi_k(x, y)"></span>. Each arrow is one of the 20 P&#8209;GRPO experts, drawn along the three directions with the most variation in its space.</figcaption>
+  </figure>
+  <figure class="band paper-fig">
+    <img src="static/img/fig_rank_grpo.svg" width="760" height="302" alt="Cumulative variance of weight updates, rewards and log-ratios, and the log-ratio matrix">
+    <figcaption id="cap-rank"><span class="fig-n">Figure 4.</span> <b>Policies trained on different rewards vary along fewer directions than the rewards.</b> <i>Left:</i> cumulative variance of the 20 P&#8209;GRPO basis policies' weight updates, rewards and log-ratios. <i>Right:</i> the log-ratio matrix.</figcaption>
+  </figure>
+  <div class="measure">
+    <div class="prose">
+      <p><b>Held-out policies can be easier to represent than their rewards.</b> On RM&#8209;Div, the other basis policies' log-ratios explain more variation of a held-out expert's log-ratio than the other rewards explain of its reward, for all ten experts. Policies trained on different rewards thus change the reference policy along directions that can be reused for a new reward.</p>
+    </div>
+  </div>
+
+  <details class="fig-fold">
+    <summary>Show the fits for all ten RM&#8209;Div experts</summary>
+    <figure class="band">
+      <div class="fig-body" data-component="rmdiv_dumbbell" data-src="static/data/rmdiv_heldout.json"></div>
+      <figcaption id="cap-rmdiv"><b>A held-out expert's policy can be close to a combination of the others' when its reward is not.</b> Each of the ten RM&#8209;Div experts is held out in turn, and the other nine predict its reward from their rewards (orange) or its policy log-ratio from their log-ratios (blue), on held-out prompts. Hover a row for that expert's two fits.</figcaption>
+    </figure>
+  </details>
+</section>
+
+<section class="section" id="heldout">
+  <div class="measure">
+    <h2>3. Held-out rewards and policy space coverage</h2>
+    <div class="prose">
+      <p>To test this, we hold out each expert of P&#8209;GRPO, P&#8209;DPO and RM&#8209;Div in turn and predict it from the others, without ever using it. Before decoding, a <b>coverage</b> score measures how well the other basis policies' log-ratios predict the new reward on held-out calibration prompts<span class="sn-ref">1</span><span class="sn" role="note"><span class="sn-n">1</span>The share of the new reward’s variation across calibration responses that the fit predicts on prompts it was not fit on, averaged over random splits of the prompts.</span>. We score each prediction by its <b>recovery</b>, the share of RL's reward gain it reaches, and its <b>relative KL</b> to <span class="tex" data-tex="\pi_{\mathrm{tar}}"></span><span class="sn-ref">2</span><span class="sn" role="note"><span class="sn-n">2</span><span class="tex" data-tex="\mathrm{KL}(\pi_{\mathrm{tar}}\,\|\,\cdot\,)"></span> per token, measured on <span class="tex" data-tex="\pi_{\mathrm{tar}}"></span>’s own responses to the evaluation prompts.</span>, below 1 when it is closer to <span class="tex" data-tex="\pi_{\mathrm{tar}}"></span> than the reference model.</p>
+    </div>
+  </div>
+  <figure class="band paper-fig">
+    <img src="static/img/fig_heldout.svg" width="968" height="423" alt="Recovery and relative KL against coverage for every held-out expert of three bases">
+    <figcaption id="cap-heldout"><span class="fig-n">Figure 5.</span> <b>Coverage, computed before decoding, predicts both how much of a held&#8209;out reward PoEM recovers and how close it gets to <span class="tex" data-tex="\pi_{\mathrm{tar}}"></span>.</b> Each point is one expert, held out and predicted from the others. <i>Top:</i> recovery. <i>Bottom:</i> relative KL to <span class="tex" data-tex="\pi_{\mathrm{tar}}"></span>. The shaded region is covered.</figcaption>
+  </figure>
+  <div class="measure">
+    <div class="prose">
+      <p><b>Coverage predicts which rewards PoEM can reach</b> (Figure 5, Table 1). On all three bases, coverage ranks the reward error, and covered rewards recover more of RL's gain than the others. A high coverage means that the basis policies already span the direction in which RL moves the policy. Held-out rewards remain harder than combined ones, so coverage is most useful as a filter on which predictions to use: it rarely passes a failure. Raising the composition strength does not rescue uncovered rewards, since it cannot add a missing direction.</p>
+    </div>
+  </div>
+  <figure class="band cap-top">
+    <figcaption id="cap-lineup-rmdiv"><span class="fig-n">Table 1.</span> <b>PoEM writes like a covered held-out expert.</b> The Skywork expert of RM&#8209;Div is held out as <span class="tex" data-tex="\pi_{\mathrm{tar}}"></span>, and PoEM composes the other nine. Shading marks phrasing that <span class="tex" data-tex="\pi_{\mathrm{tar}}"></span> writes and the reference model does not; bars show the relative KL to <span class="tex" data-tex="\pi_{\mathrm{tar}}"></span> on the prompt. Blind reviewers found PoEM's response closest to <span class="tex" data-tex="\pi_{\mathrm{tar}}"></span>'s on 29 of 53 prompts; five are shown.</figcaption>
+    <div class="fig-body" data-component="lineup" data-src="static/data/lineup.json" data-set="rmdiv"></div>
+  </figure>
+</section>
+
+<section class="section" id="larger-rm">
+  <div class="measure">
+    <h2>4. Predicting RL on a larger reward model</h2>
+    <div class="prose">
+      <p>A prediction is especially interesting when RL is expensive. For instance, when we are raining a policy using a large reward model that requires scoring every rollout. We predict RL on an 8B reward model from RM&#8209;Sky, basis policies trained on its smaller models from a similar family,<span class="sn-ref">3</span><span class="sn" role="note"><span class="sn-n">3</span>Skywork-Reward-V2 models from 0.6B to 4B parameters, on Qwen3 and Llama 3.2. All policies were trained from Qwen3-0.6B.</span> using the 8B model only to score the calibration set. PoEM matches RL's reward gain and is close to <span class="tex" data-tex="\pi_{\mathrm{tar}}"></span> in comparison to RL's training variation (Figure 6). We also compose RM&#8209;Div, whose reward models are completely different. PoEM recovers less of the reward gain there, but is still closer to <span class="tex" data-tex="\pi_{\mathrm{tar}}"></span> than any of its basis policies alone.</p>
+    </div>
+  </div>
+  <figure class="band paper-fig side-cap">
+    <img src="static/img/fig_large_rm_main.svg" width="382" height="377" alt="Recovery against relative KL for PoEM, single experts and a second RL run on the 8B reward model">
+    <figcaption id="cap-bigrm"><span class="fig-n">Figure 6.</span> <b>Experts trained with RL on smaller reward models predict RL on a larger one.</b> Diamonds are PoEM over RM&#8209;Sky or RM&#8209;Div, triangles single experts, and the square a second RL run on the 8B reward model.</figcaption>
+  </figure>
+</section>
+
+<section class="section" id="discussion">
+  <div class="measure">
+    <h2>5. Implications for RL post-training</h2>
+    <div class="prose">
+      <p>Our findings show that a set of trained RL policies carries enough structure to compose new reward behavior at inference time. The strong assumption that rewards combine linearly is replaced by a much weaker geometric one on policy log-ratios. This also suggests that RL with different rewards might move a model along a few shared directions.</p>
+      <p><b>Approximate RL on expensive rewards.</b> RL evaluates the target reward on every rollout, while PoEM evaluates it only on a small calibration set. RL on a large reward model or a human rater could therefore be approximated with basis policies trained on cheap rewards.</p>
+      <p><b>Preview a reward before training on it.</b> PoEM shows how a candidate reward would change the policy before an RL run starts. This lets one inspect the behaviors of the post-trained model that the reward does not score directly.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="gallery">
+  <div class="measure">
+    <h2>More responses</h2>
+    <div class="prose">
+      <p>More held-out responses and the image diffusion examples are in the gallery.</p>
+    </div>
+    <p class="more-link"><a class="btn" href="gallery.html">Open the response gallery</a> <a class="btn" href="gallery.html#images">Image examples</a></p>
+  </div>
+</section>
+
+<section class="section appendix" id="bibtex">
+  <div class="measure">
+    <h2>Citation</h2>
+<pre class="bib" id="bibtex-code">@inproceedings{hamidieh2026poem,
+  title     = {PoEM: Predicting RL Outcomes from Existing Policies},
+  author    = {Hamidieh, Kimia and Daras, Giannis and Torralba, Antonio},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {39},
+  year      = {2026}
+}</pre>
+  </div>
+</section>
+
+</div>
+</div>
+
+<footer class="footer">
+  <div class="measure">
+    <p>Page template adapted from the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener">Academic
+    Project Page Template</a>.</p>
+  </div>
+</footer>
+
+</div>
+
+<script src="static/js/math.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/copy-tex.min.js"></script>
+<script src="static/js/eq_tex.js"></script>
+<script src="static/js/site.js"></script>
+<script src="static/js/figure1.js"></script>
+<script src="static/js/space3d.js"></script>
+<script src="static/js/rmdiv.js"></script>
+<script src="static/js/lineup.js"></script>
+<script src="static/js/toc.js"></script>
+</body>
+</html>

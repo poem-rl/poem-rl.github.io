@@ -1,0 +1,42 @@
+.c-lineup { font-size: var(--step--1); color: var(--ink-2); }
+
+.c-lineup .ln-pick { position: relative; margin: 0 0 0.35rem; }
+.c-lineup .ln-cur { display: flex; align-items: baseline; gap: 0.45rem; width: 100%; padding: 0.15rem 0; font: inherit; font-style: italic; color: var(--ink);
+  text-align: left; background: none; border: 0; cursor: pointer; }
+.c-lineup .ln-q { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; border-bottom: 1px dotted var(--line-2); }
+.c-lineup .ln-cur:hover .ln-q, .c-lineup .ln-cur[aria-expanded="true"] .ln-q { border-bottom-color: var(--ink-2); }
+.c-lineup .ln-chev { flex: none; font-style: normal; color: var(--muted); font-size: 0.85em; }
+.c-lineup .ln-menu { position: absolute; z-index: 5; left: 0; right: 0; top: 100%; margin: 0.2rem 0 0; padding: 0.25rem 0; list-style: none;
+  background: #fff; border: 1px solid var(--line-2); border-radius: 4px; box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08); }
+.c-lineup .ln-menu li { padding: 0.35rem 0.7rem; font-style: italic; color: var(--ink-2); cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.c-lineup .ln-menu li:hover, .c-lineup .ln-menu li:focus { color: var(--ink); outline: none; text-decoration: underline; text-decoration-color: var(--line-2); }
+.c-lineup .ln-menu li[aria-selected="true"] { color: var(--ink); font-weight: 600; }
+.c-lineup .ln-prompt { margin: 0 0 0.35rem; font-style: italic; color: var(--ink); cursor: pointer; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.c-lineup .ln-prompt.open { display: block; }
+.c-lineup .ln-row { display: grid; grid-template-columns: 8.9rem minmax(0, 1fr) 6.2rem; column-gap: 0.8rem; align-items: start; width: 100%;
+  box-sizing: border-box; text-align: left; font: inherit; color: inherit; background: transparent; border: 0; border-top: 1px solid var(--line);
+  padding: 0.45rem 0.2rem; cursor: pointer; border-radius: 0; }
+.c-lineup .ln-row:hover { background: none; }
+.c-lineup .ln-row:focus-visible { outline: 2px solid var(--focus, #1e3a8a); outline-offset: -2px; }
+.c-lineup .ln-row.r-tar { border-top-color: var(--line-2); }
+.c-lineup .ln-who b { display: block; font-weight: 600; font-size: 0.9rem; color: var(--ink); }
+.c-lineup .ln-who b::before { content: ""; display: inline-block; width: 0.55rem; height: 0.55rem; border-radius: 50%; margin-right: 0.4rem; background: var(--rc); vertical-align: 0.05rem; }
+.c-lineup .ln-who small { display: block; font-size: 0.76rem; color: var(--muted); padding-left: 0.95rem; font-variant-numeric: tabular-nums; }
+.c-lineup .r-ref { --rc: var(--ref-strong); } .c-lineup .r-e1, .c-lineup .r-top { --rc: var(--e1); } .c-lineup .r-e2 { --rc: var(--e2); }
+.c-lineup .r-poem { --rc: var(--poem); } .c-lineup .r-tar { --rc: var(--tar); }
+.c-lineup .ln-txt { font-family: var(--mono); font-size: 0.77rem; line-height: 1.6; color: var(--ink); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.c-lineup .is-open .ln-txt { display: block; white-space: pre-wrap; overflow-wrap: anywhere; }
+.c-lineup .ln-md { color: var(--muted); }
+.c-lineup .ln-kl { display: flex; align-items: center; gap: 0.4rem; padding-top: 0.25rem; }
+.c-lineup .ln-track { position: relative; flex: 1; height: 0.45rem; background: var(--surface-2); border-radius: 2px; }
+.c-lineup .ln-track i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--rc); border-radius: 2px; }
+.c-lineup .ln-track u { position: absolute; top: -0.2rem; bottom: -0.2rem; width: 1px; background: var(--ink-2); }
+.c-lineup .ln-kl em { font-style: normal; font-variant-numeric: tabular-nums; font-size: 0.8rem; color: var(--ink); min-width: 2.1rem; text-align: right; margin-left: auto; }
+.c-lineup mark.ln-m { color: inherit; background: color-mix(in srgb, var(--tar) 22%, transparent); border-radius: 2px; }
+.c-lineup mark.ln-b { color: inherit; background: none; text-decoration: underline 1.5px var(--tar-ink); text-underline-offset: 0.18em; }
+@media (max-width: 640px) {
+  .c-lineup .ln-row { grid-template-columns: minmax(0, 1fr) 7rem; row-gap: 0.25rem; }
+  .c-lineup .ln-txt { grid-column: 1 / -1; grid-row: 2; }
+  .c-lineup .ln-who small { display: inline; padding-left: 0.5rem; }
+  .c-lineup .ln-who b { display: inline; }
+}
