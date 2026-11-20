@@ -42,7 +42,7 @@
   </div>
   <div class="tldr">
     <span class="lbl">TL;DR</span>
-    We find that RL training with different rewards moves the reference policy along fewer directions than the rewards. We leverage this empirical finding to predict the RL policies a given set of basis policies trained with different rewards can reach, by composing the basis policies at inference time.
+    When we train the same starting model with reinforcement learning (RL) on different rewards, the resulting policies vary along fewer directions than the rewards themselves. PoEM uses these shared directions to approximate the policy RL would produce for a new reward without another training run. It scores a small set of responses with the new reward to learn how to mix existing policies at inference time.
   </div>
 </header>
 
