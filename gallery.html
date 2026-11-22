@@ -33,21 +33,9 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
   <p class="back"><a href="./">PoEM: Predicting RL Outcomes from Existing Policies</a></p>
   <h1>Response gallery</h1>
   <div class="tldr">
-    More responses for the larger reward model, in the format of the page. The <a href="#images">image examples</a> from the diffusion models follow.
+    The <a href="#images">image examples</a> from the diffusion models come first, followed by more responses for the <a href="#larger-rm">larger reward model</a>, in the format of the page.
   </div>
 </header>
-
-<section class="section" id="larger-rm">
-  <div class="measure">
-    <h2>Larger reward model</h2>
-    <div class="prose">
-      <p>π<sub>tar</sub> is RL on the 8B reward model, and PoEM composes the experts trained with RL on its 3B and 4B siblings. On these prompts PoEM writes the way π<sub>tar</sub> does; over 53 short prompts, blind reviewers found PoEM's response closest to π<sub>tar</sub>'s on 27, the top expert's on 16 and the reference model's on 10. Where every response restates the prompt first, rows start at the first item, and on the wildebeest prompt at the fourth, which PoEM and π<sub>tar</sub> write word for word.</p>
-    </div>
-  </div>
-  <figure class="band">
-    <div class="fig-body" data-component="lineup" data-src="static/data/lineup.json" data-set="gallery_bigrm"></div>
-  </figure>
-</section>
 
 <section class="section" id="images">
   <div class="measure">
@@ -59,6 +47,18 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
   <figure class="band">
     <div class="fig-body" data-component="diffusion" data-src="static/data/diffusion.json"></div>
     <figcaption id="cap-diffusion"><b>PoEM approximates the effect of RL fine-tuning on a held&#8209;out image reward.</b> Composing the other experts reproduces much of the change the target model makes. The weights are fit to the held&#8209;out expert at each denoising step, so this shows how much of its changes lie within what the others can express.</figcaption>
+  </figure>
+</section>
+
+<section class="section" id="larger-rm">
+  <div class="measure">
+    <h2>Larger reward model</h2>
+    <div class="prose">
+      <p>π<sub>tar</sub> is RL on the 8B reward model, and PoEM composes the experts trained with RL on its 3B and 4B siblings. On these prompts PoEM writes the way π<sub>tar</sub> does; over 53 short prompts, blind reviewers found PoEM's response closest to π<sub>tar</sub>'s on 27, the top expert's on 16 and the reference model's on 10. Where every response restates the prompt first, rows start at the first item, and on the wildebeest prompt at the fourth, which PoEM and π<sub>tar</sub> write word for word.</p>
+    </div>
+  </div>
+  <figure class="band">
+    <div class="fig-body" data-component="lineup" data-src="static/data/lineup.json" data-set="gallery_bigrm"></div>
   </figure>
 </section>
 
